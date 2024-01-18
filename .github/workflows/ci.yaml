@@ -1,0 +1,23 @@
+name: Run Job on Main Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Run Your Job
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: |
+        # Add your job commands here
+        echo "$SSH_PRIVATE_KEY" > keyfile
+        chmod 600 keyfile
+        ssh -t -i keyfile ubuntu@13.48.57.165 "sudo bash ~/deploy.sh" 
